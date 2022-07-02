@@ -1,0 +1,9 @@
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+palvelin-->selain:Statuskoodi 201
+
+note over palvelin:
+Statuskoodi 201
+kertoo selaimelle 
+että muistiinpano on luotu
+onnistuneesti.
+end note 

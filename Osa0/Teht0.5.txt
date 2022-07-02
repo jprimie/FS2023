@@ -1,0 +1,8 @@
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+palvelin-->selain:HTML-koodi
+
+note over selain:
+Selain suorittaa JavaScriptiä
+ja rakentaa sivun ilman muita 
+pyyntöjä palvelimelta
+end note
