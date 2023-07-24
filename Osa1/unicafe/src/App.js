@@ -4,11 +4,28 @@ const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 );
 
-const Statistics = ({ text, total }) => (
-  <p>
-    {text} {total}
-  </p>
-);
+const Statistics = ({ statistics }) => {
+  return (
+    <table>
+      <tbody>
+        <StatisticLine statistic={statistics.good} />
+        <StatisticLine statistic={statistics.neutral} />
+        <StatisticLine statistic={statistics.bad} />
+        <StatisticLine statistic={statistics.all} />
+        <StatisticLine statistic={statistics.average} />
+        <StatisticLine statistic={statistics.positive} />
+      </tbody>
+    </table>
+  );
+};
+const StatisticLine = ({ statistic }) => {
+  return (
+    <tr>
+      <td>{statistic.text} </td>
+      <td>{statistic.value} </td>
+    </tr>
+  );
+};
 
 const App = () => {
   // tallenna napit omaan tilaansa
@@ -17,6 +34,49 @@ const App = () => {
   const [bad, setBad] = useState(0);
   const [allClicks, setAll] = useState([]);
   const [total, setTotal] = useState(0);
+
+  const countAverage = () => {
+    let average = 0;
+    allClicks.forEach((element) => {
+      average += element;
+    });
+    return average / total;
+  };
+
+  const countPositive = () => {
+    let positiveRatings = 0;
+    allClicks.forEach((element) => {
+      if (element === 1) positiveRatings++;
+    });
+    return (positiveRatings / total) * 100 + "%";
+  };
+
+  const statistics = {
+    good: {
+      text: "Good",
+      value: good,
+    },
+    neutral: {
+      text: "Neutral",
+      value: neutral,
+    },
+    bad: {
+      text: "Bad",
+      value: bad,
+    },
+    all: {
+      text: "All",
+      value: total,
+    },
+    average: {
+      text: "Average",
+      value: countAverage(),
+    },
+    positive: {
+      text: "Positive",
+      value: countPositive(),
+    },
+  };
 
   const handleGoodClick = () => {
     setAll(allClicks.concat(1));
@@ -39,22 +99,6 @@ const App = () => {
     setTotal(good + neutral + updatedBad);
   };
 
-  const countAverage = () => {
-    let average = 0;
-    allClicks.forEach((element) => {
-      average += element;
-    });
-    return average / total;
-  };
-
-  const countPositive = () => {
-    let positiveRatings = 0;
-    allClicks.forEach((element) => {
-      if (element === 1) positiveRatings++;
-    });
-    return (positiveRatings / total) * 100;
-  };
-
   return (
     <div>
       <h1> give feedback </h1>
@@ -62,12 +106,8 @@ const App = () => {
       <Button handleClick={handleNeutralClick} text={"Neutral"} />
       <Button handleClick={handleBadClick} text={"Bad"} />
       <h1> statistics </h1>
-      <Statistics text={"Good"} total={good} />
-      <Statistics text={"Neutral"} total={neutral} />
-      <Statistics text={"Bad"} total={bad} />
-      <Statistics text={"All"} total={total} />
-      <Statistics text={"Average"} total={countAverage(allClicks)} />
-      <Statistics text={"Positive"} total={countPositive(allClicks) + "%"} />
+      {allClicks !== 0 && <Statistics statistics={statistics} />}
+      {allClicks === 0 && <p>No feedback given</p>}
     </div>
   );
 };
